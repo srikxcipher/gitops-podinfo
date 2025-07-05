@@ -68,7 +68,6 @@ gitops-podinfo/
 - [Kustomize](https://kustomize.io/) - Kubernetes native configuration management
 - [podinfo](https://github.com/stefanprodan/podinfo) - Demo microservice application
 - [Kubernetes](https://kubernetes.io/) - Container orchestration platform
-- [GitHub Actions](https://github.com/features/actions) - CI/CD workflow automation
 
 ## Prerequisites
 
