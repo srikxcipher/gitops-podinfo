@@ -23,16 +23,43 @@ The repository follows a structured approach to GitOps deployment:
 
 ```
 gitops-podinfo/
-├── apps/                    # Application definitions
-│   └── podinfo/             # PodInfo microservice configuration
-├── clusters/                # Cluster-specific configurations
-│   ├── dev/                 # Development environment
-│   ├── staging/             # Staging environment
-│   └── production/          # Production environment
-├── infrastructure/          # Shared infrastructure components
-│   ├── kustomize/           # Base Kustomize configurations
-│   └── flux/                # Flux system configuration
-└── .github/                 # CI/CD workflows and automation
+├── LICENSE                        
+├── README.md                     
+├── apps                           # Application definitions (Kustomize/Helm overlays)
+│   ├── base                       # Base configs shared by all environments
+│   │   └── podinfo
+│   │       ├── deployment.yaml        # Base deployment manifest
+│   │       └── kustomization.yaml     # Kustomize base config
+│   ├── team-base                  # Team-specific overlay using Kustomize
+│   │   ├── namespace.yaml             # Namespace for team-base
+│   │   └── podinfo
+│   │       └── kustomization.yaml     # Team-base overlay kustomization
+│   ├── team-helm                  # Team-specific overlay using Helm
+│   │   ├── namespace.yaml             # Namespace for team-helm
+│   │   └── podinfo
+│   │       ├── helmrelease.yaml       # HelmRelease resource for PodInfo
+│   │       ├── helmrepository.yaml    # Helm chart repo definition
+│   │       └── kustomization.yaml     # Kustomize config for Helm overlay
+│   └── team-overlay               # Custom overlay for another team
+│       ├── namespace.yaml             # Namespace for team-overlay
+│       └── podinfo
+│           ├── deployment.yaml        # Team-specific deployment patch
+│           └── kustomization.yaml     # Team-overlay kustomization
+├── clusters                       # Cluster-specific configs
+│   └── cluster-podinfo
+│       ├── apps-team-base.yaml        # Syncs team-base apps into cluster
+│       ├── apps-team-helm.yaml        # Syncs team-helm apps into cluster
+│       ├── apps-team-overlay.yaml     # Syncs team-overlay apps into cluster
+│       ├── flux-system                # Flux GitOps controllers and settings
+│       │   ├── gotk-components.yaml       # Flux core components
+│       │   ├── gotk-sync.yaml             # Flux sync settings
+│       │   └── kustomization.yaml         # Flux system kustomization
+│       └── infrastructure.yaml        # Shared infra for this cluster
+└── infrastructure                 # Shared infrastructure definitions
+    ├── imagepolicy.yaml               # Image update policy
+    ├── imagerepository.yaml           # Image repository source
+    └── imageupdateautomation.yaml     # Automate image updates in Git
+    
 ```
 
 ## Technologies Used
